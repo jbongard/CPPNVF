@@ -4,6 +4,10 @@ from tree import TREE
 
 cppn = CPPN()
 
+cppn.Draw()
+
+exit()
+
 tree = TREE()
 
 for i in range(10):
