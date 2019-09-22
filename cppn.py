@@ -48,8 +48,6 @@ class CPPN:
 
     def Get_DeltaX_From_Outputs(self,outputs):
 
-        return outputs[1]
-
         minusOneToOne = outputs[1]
 
         minusDeltaXToDeltaX = minusOneToOne * c.vectorFieldXDeltaMax
@@ -57,8 +55,6 @@ class CPPN:
         return minusDeltaXToDeltaX 
 
     def Get_DeltaY_From_Outputs(self,outputs):
-
-        return outputs[2]
 
         minusOneToOne = outputs[2]
 
