@@ -8,6 +8,14 @@ import matplotlib.pyplot as plt
 
 from tree import TREE
 
+cppns = {}
+
+def Create_CPPNs():
+
+    for panelIndex in range(1,c.numberOfCPPNs+1):
+
+        cppns[panelIndex] = CPPN()
+
 def Draw_CPPNs():
 
     fig = Prep_Drawing()
@@ -17,6 +25,14 @@ def Draw_CPPNs():
         cppns[panelIndex].Draw(fig,panelIndex)
 
     plt.show()
+
+def Mutate_CPPNs(choice):
+
+    for panelIndex in range(1,c.numberOfCPPNs+1):
+
+        if panelIndex != choice:
+
+            cppns[panelIndex] = copy.deepcopy(cppns[choice])
 
 def Prep_Drawing():
 
@@ -32,23 +48,17 @@ def Prep_Drawing():
 
 # -------------- Main function -------------------
 
-cppns = {}
-
-for panelIndex in range(1,c.numberOfCPPNs+1):
-
-    cppns[panelIndex] = CPPN()
+Create_CPPNs()
 
 Draw_CPPNs()
 
-choice = int( input('Which vector field to you like the best [1-'+str(c.numberOfCPPNs)+']: ') )
+for g in range(5):
 
-for panelIndex in range(1,c.numberOfCPPNs+1):
+    choice = int( input('Which vector field to you like the best [1-'+str(c.numberOfCPPNs)+']: ') )
 
-    if panelIndex != choice:
+    Mutate_CPPNs(choice)
 
-        cppns[panelIndex] = copy.deepcopy(cppns[choice])
-
-Draw_CPPNs()
+    Draw_CPPNs()
 
 exit()
 
