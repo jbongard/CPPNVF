@@ -42,13 +42,13 @@ vectorFieldActionColors = {
 
 # ---------------- CPPN -----------------
 
-cppnInputs = 2
+cppnInputs = 3 # x , y and r
 
 cppnHiddens = numEdgeChangeActions + 2
 
 cppnOutputs = numEdgeChangeActions + 2 
 
-cppnInitialMinWeight = -1.0
+cppnInitialMinWeight = -10.0
 
-cppnInitialMaxWeight = +1.0
+cppnInitialMaxWeight = +10.0
 
