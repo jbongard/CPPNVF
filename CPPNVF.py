@@ -1,10 +1,54 @@
+import constants as c
+
+import copy
+
 from cppn import CPPN
+
+import matplotlib.pyplot as plt
 
 from tree import TREE
 
-cppn = CPPN()
+def Draw_CPPNs():
 
-cppn.Draw()
+    fig = Prep_Drawing()
+
+    for panelIndex in range(1,c.numberOfCPPNs+1):
+
+        cppns[panelIndex].Draw(fig,panelIndex)
+
+    plt.show()
+
+def Prep_Drawing():
+
+    fig = plt.figure()
+
+    ax = fig.add_subplot(339)
+
+    ax.set_xlim( c.vectorFieldMinimum - c.vectorFieldCellWidth  , c.vectorFieldMaximum + c.vectorFieldCellWidth)
+
+    ax.set_ylim( c.vectorFieldMinimum - c.vectorFieldCellHeight , c.vectorFieldMaximum + c.vectorFieldCellHeight)
+
+    return fig
+
+# -------------- Main function -------------------
+
+cppns = {}
+
+for panelIndex in range(1,c.numberOfCPPNs+1):
+
+    cppns[panelIndex] = CPPN()
+
+Draw_CPPNs()
+
+choice = int( input('Which vector field to you like the best [1-'+str(c.numberOfCPPNs)+']: ') )
+
+for panelIndex in range(1,c.numberOfCPPNs+1):
+
+    if panelIndex != choice:
+
+        cppns[panelIndex] = copy.deepcopy(cppns[choice])
+
+Draw_CPPNs()
 
 exit()
 

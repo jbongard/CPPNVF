@@ -1,5 +1,7 @@
 import constants as c
 
+import math
+
 import matplotlib.pyplot as plt
 
 import numpy as np
@@ -30,13 +32,13 @@ class VECTOR_FIELD:
 
                 self.Set_DeltaY_At(x,y,0.0) 
 
-    def Draw(self):
+    def Draw(self,fig,panelIndex):
 
-        self.Prep_Drawing()
+        ax = self.Prep_Drawing(fig,panelIndex)
 
         self.Draw_Vectors()
 
-        plt.show()
+        self.Clean_Up_Drawing(ax)
 
     def Get_Xs(self):
 
@@ -59,6 +61,16 @@ class VECTOR_FIELD:
         self.deltaYs[x,y] = deltaY
 
 # --------------------- Private methods ----------------------
+
+    def Clean_Up_Drawing(self,ax):
+       
+        plt.xticks([])
+
+        plt.yticks([])
+ 
+        #ax.set_xticklabels([])
+
+        #ax.set_yticklabels([])
 
     def Draw_Vectors(self):
 
@@ -86,12 +98,16 @@ class VECTOR_FIELD:
 
             self.Set_DeltaY_At(x,y,np.random.uniform(-c.vectorFieldYDeltaMin , +c.vectorFieldYDeltaMin))
 
-    def Prep_Drawing(self):
+    def Prep_Drawing(self,fig,panelIndex):
 
-        fig = plt.figure()
+        # fig = plt.figure()
 
-        ax = fig.add_subplot(111)
+        ax = fig.add_subplot( math.sqrt(c.numberOfCPPNs) , math.sqrt(c.numberOfCPPNs) , panelIndex )
+
+        plt.title(str(panelIndex))
 
         ax.set_xlim( c.vectorFieldMinimum - c.vectorFieldCellWidth  , c.vectorFieldMaximum + c.vectorFieldCellWidth)
 
         ax.set_ylim( c.vectorFieldMinimum - c.vectorFieldCellHeight , c.vectorFieldMaximum + c.vectorFieldCellHeight)
+
+        return ax

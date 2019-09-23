@@ -18,6 +18,8 @@ class CPPN:
 
         self.hiddenLayer1AbsMask = np.random.randint(2, size=c.cppnHiddens)
 
+        self.hiddenLayer1GauMask = np.random.randint(2, size=c.cppnHiddens)
+
         self.hiddenLayer1TanMask = np.random.randint(2, size=c.cppnHiddens)
 
         self.hiddenLayer1NegMask = np.random.randint(2, size=c.cppnHiddens) 
@@ -28,6 +30,10 @@ class CPPN:
 
         self.hiddenLayer2SinMask = np.random.randint(2, size=c.cppnHiddens)
 
+        self.hiddenLayer2AbsMask = np.random.randint(2, size=c.cppnHiddens)
+
+        self.hiddenLayer2GauMask = np.random.randint(2, size=c.cppnHiddens)
+
         self.hiddenLayer2TanMask = np.random.randint(2, size=c.cppnHiddens)
 
         self.hiddenLayer2NegMask = np.random.randint(2, size=c.cppnHiddens)
@@ -36,13 +42,13 @@ class CPPN:
 
         self.outputLayer  = np.zeros(c.cppnOutputs,dtype='f')
 
-    def Draw(self):
+    def Draw(self,fig,panelIndex):
 
         vectorField = VECTOR_FIELD()
 
         self.Paint(vectorField)
 
-        vectorField.Draw()
+        vectorField.Draw(fig,panelIndex)
 
     def Print(self):
 
@@ -80,18 +86,21 @@ class CPPN:
 
     def Evaluate_At(self,x,y):
 
-        self.inputLayer[0] = 0 # x
+        self.inputLayer[0] = x
 
-        self.inputLayer[1] = 0 # y
+        self.inputLayer[1] = y
 
-        self.inputLayer[2] = np.sqrt( x**2 + y**2 )
+        self.inputLayer[2] = np.sqrt( x**2 + y**2 ) # How far is the element from the center?
 
+        self.inputLayer[3] = 1 # Bias neuron
 
         self.hiddenLayer1 = np.dot( self.inputLayer   , self.IHWeights )
 
         self.hiddenLayer1 = self.hiddenLayer1 + np.multiply( self.hiddenLayer1SinMask , np.sin(self.hiddenLayer1) )
 
         self.hiddenLayer1 = self.hiddenLayer1 + np.multiply( self.hiddenLayer1AbsMask , np.abs(self.hiddenLayer1) )
+
+        self.hiddenLayer1 = self.hiddenLayer1 + np.multiply( self.hiddenLayer1GauMask , np.exp( -self.hiddenLayer1**2 / 2.0 ) )
 
         self.hiddenLayer1 = self.hiddenLayer1 + np.multiply( self.hiddenLayer1TanMask , np.tanh(self.hiddenLayer1) )
 
@@ -101,6 +110,10 @@ class CPPN:
         self.hiddenLayer2 = np.dot( self.hiddenLayer1 , self.HHWeights )
 
         self.hiddenLayer2 = self.hiddenLayer2 + np.multiply( self.hiddenLayer2SinMask , np.sin(self.hiddenLayer2) )
+
+        self.hiddenLayer2 = self.hiddenLayer2 + np.multiply( self.hiddenLayer2AbsMask , np.abs(self.hiddenLayer2) )
+
+        self.hiddenLayer2 = self.hiddenLayer2 + np.multiply( self.hiddenLayer2GauMask , np.exp( -self.hiddenLayer2**2 / 2.0 ) )
 
         self.hiddenLayer2 = self.hiddenLayer2 + np.multiply( self.hiddenLayer2TanMask , np.tanh(self.hiddenLayer2) )
 

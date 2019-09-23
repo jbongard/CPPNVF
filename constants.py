@@ -1,5 +1,9 @@
 import math
 
+# -------- Visualization -----------------
+
+numberOfCPPNs          = 3 * 3 
+
 # --------------- Edges ------------------
 
 maxEdges               = 100
@@ -42,7 +46,7 @@ vectorFieldActionColors = {
 
 # ---------------- CPPN -----------------
 
-cppnInputs = 3 # x , y and r
+cppnInputs = 4 # x , y , r and bias
 
 cppnHiddens = numEdgeChangeActions + 2
 
