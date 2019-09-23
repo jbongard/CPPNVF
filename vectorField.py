@@ -74,7 +74,7 @@ class VECTOR_FIELD:
 
                 plt.plot( [x,x + deltaX] , [y , y + deltaY] , color=c.vectorFieldActionColors[action])
 
-                plt.plot(x,y,'k.')
+                # plt.plot(x,y,'k.')
 
     def Paint_Randomly(self):
 

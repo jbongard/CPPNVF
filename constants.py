@@ -12,7 +12,7 @@ numEdgeChangeActions   = 4
 
 # ----------- Vector field ---------------
 
-vectorFieldResolution  = 31 
+vectorFieldResolution  = 51 
 
 vectorFieldMinimum     = -1.0
 
@@ -44,7 +44,7 @@ vectorFieldActionColors = {
 
 cppnInputs = 2
 
-cppnHiddens = 3 
+cppnHiddens = numEdgeChangeActions + 2
 
 cppnOutputs = numEdgeChangeActions + 2 
 

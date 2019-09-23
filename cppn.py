@@ -46,7 +46,7 @@ class CPPN:
 
     def Get_DeltaX_From_Outputs(self,outputs):
 
-        return outputs[c.numEdgeChangeActions]
+        # return outputs[c.numEdgeChangeActions]
 
         minusOneToOne = outputs[c.numEdgeChangeActions]
 
@@ -56,7 +56,7 @@ class CPPN:
 
     def Get_DeltaY_From_Outputs(self,outputs):
 
-        return outputs[c.numEdgeChangeActions+1]
+        # return outputs[c.numEdgeChangeActions+1]
 
         minusOneToOne = outputs[c.numEdgeChangeActions+1]
 
@@ -73,12 +73,35 @@ class CPPN:
 
         self.hiddenLayer1 = np.tanh( np.dot( self.inputLayer   , self.IHWeights ) )
 
-        self.hiddenLayer2 = np.tanh( np.dot( self.hiddenLayer1 , self.HHWeights ) )
+        #self.hiddenLayer2 = np.tanh( np.dot( self.hiddenLayer1 , self.HHWeights ) )
+
+        self.hiddenLayer2 = np.dot( self.hiddenLayer1 , self.HHWeights )
+
+        for h in range(c.cppnHiddens):
+
+            if h%2==0:
+
+                self.hiddenLayer2[h] = np.sin( self.hiddenLayer2[h] )
+
+            elif h%2==1:
+
+                self.hiddenLayer2[h] = self.Gaussian( self.hiddenLayer2[h] )
+
+            elif h%2==2:
+
+                self.hiddenLayer2[h] = np.abs( self.hiddenLayer2[h] )
+
+            else:
+                self.hiddenLayer2[h] = np.tanh( self.hiddenLayer2[h] )
 
         self.outputLayer  = np.tanh( np.dot( self.hiddenLayer2 , self.HOWeights ) )
 
 
         return self.outputLayer 
+
+    def Gaussian(self,x):
+
+        return np.exp( -x**2 / 2.0 )
 
     def Paint(self,vectorField):
 
