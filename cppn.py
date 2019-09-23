@@ -8,15 +8,19 @@ class CPPN:
 
     def __init__(self):
 
-        self.inputLayer = np.zeros(c.cppnInputs,dtype='f')
+        self.inputLayer   = np.zeros(c.cppnInputs,dtype='f')
 
         self.IHWeights    = np.random.uniform( c.cppnInitialMinWeight , c.cppnInitialMaxWeight , [c.cppnInputs,c.cppnHiddens] )
 
-        self.hiddenLayer = np.zeros(c.cppnHiddens,dtype='f')
+        self.hiddenLayer1 = np.zeros(c.cppnHiddens,dtype='f')
+
+        self.HHWeights    = np.random.uniform( c.cppnInitialMinWeight , c.cppnInitialMaxWeight , [c.cppnHiddens,c.cppnHiddens] )
+
+        self.hiddenLayer2 = np.zeros(c.cppnHiddens,dtype='f')
 
         self.HOWeights    = np.random.uniform( c.cppnInitialMinWeight , c.cppnInitialMaxWeight , [c.cppnHiddens,c.cppnOutputs] )
 
-        self.outputLayer = np.zeros(c.cppnOutputs,dtype='f')
+        self.outputLayer  = np.zeros(c.cppnOutputs,dtype='f')
 
     def Draw(self):
 
@@ -34,21 +38,17 @@ class CPPN:
 
     def Get_Action_From_Outputs(self,outputs):
 
-        minusOneToOne = outputs[0]
+        possibleActions = outputs[ 0 : c.numEdgeChangeActions ]
 
-        zeroToTwo = minusOneToOne + 1
-
-        zeroToOne = zeroToTwo / 2.0
-
-        zeroToNumActionsMinusOne = zeroToOne * c.numEdgeChangeActions
-
-        action = np.floor(zeroToNumActionsMinusOne) 
+        action = np.argmax( possibleActions )
 
         return action 
 
     def Get_DeltaX_From_Outputs(self,outputs):
 
-        minusOneToOne = outputs[1]
+        return outputs[c.numEdgeChangeActions]
+
+        minusOneToOne = outputs[c.numEdgeChangeActions]
 
         minusDeltaXToDeltaX = minusOneToOne * c.vectorFieldXDeltaMax
 
@@ -56,7 +56,9 @@ class CPPN:
 
     def Get_DeltaY_From_Outputs(self,outputs):
 
-        minusOneToOne = outputs[2]
+        return outputs[c.numEdgeChangeActions+1]
+
+        minusOneToOne = outputs[c.numEdgeChangeActions+1]
 
         minusDeltaYToDeltaY = minusOneToOne * c.vectorFieldYDeltaMax
 
@@ -68,13 +70,13 @@ class CPPN:
 
         self.inputLayer[1] = y
 
-        self.hiddenLayer = np.dot( self.inputLayer , self.IHWeights )
 
-        self.hiddenLayer = np.tanh( self.hiddenLayer )
+        self.hiddenLayer1 = np.tanh( np.dot( self.inputLayer   , self.IHWeights ) )
 
-        self.outputLayer = np.dot( self.hiddenLayer , self.HOWeights )
+        self.hiddenLayer2 = np.tanh( np.dot( self.hiddenLayer1 , self.HHWeights ) )
 
-        self.outputLayer = np.tanh( self.outputLayer )
+        self.outputLayer  = np.tanh( np.dot( self.hiddenLayer2 , self.HOWeights ) )
+
 
         return self.outputLayer 
 
