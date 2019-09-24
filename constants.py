@@ -4,7 +4,7 @@ import math
 
 # -------- Visualization -----------------
 
-numberOfCPPNs          = 4 * 4 
+numberOfCPPNs          = 4 ** 2 
 
 # --------------- Edges ------------------
 
@@ -18,7 +18,7 @@ numEdgeChangeActions   = 4
 
 # ----------- Vector field ---------------
 
-vectorFieldResolution  = 31 
+vectorFieldResolution  = 41 
 
 vectorFieldMinimum     = -1.0
 

@@ -50,7 +50,11 @@ class CPPN:
 
     def Mutate(self):
 
-        self.HOWeights = np.random.normal( loc = self.HOWeights , scale = np.abs(self.HOWeights) )
+        if np.random.randint(2) == 0:
+
+            self.Mutate_A_Weight()
+        else:
+            self.Mutate_An_Activation_Function()
 
     def Print(self):
 
@@ -119,6 +123,50 @@ class CPPN:
     def Gaussian(self,x):
 
         return np.exp( -x**2 / 2.0 )
+
+    def Mutate_A_Weight(self):
+
+        mutateLayer = np.random.randint(3)
+
+        if mutateLayer == 0:
+
+            self.Mutate_A_Weight_In(self.IHWeights)
+
+        elif mutateLayer == 1:
+
+            self.Mutate_A_Weight_In(self.HHWeights)
+
+        else:
+            self.Mutate_A_Weight_In(self.HOWeights)
+
+    def Mutate_A_Weight_In(self,W):
+
+        cols, rows = W.shape
+
+        col = np.random.randint(cols)
+        row = np.random.randint(rows)
+
+        W[col,row] = np.random.normal( loc = W[col,row] , scale = np.abs(W[col,row]) )
+
+    def Mutate_An_Activation_Function(self):
+
+        mutateLayer = np.random.randint(2)
+
+        if mutateLayer == 0:
+
+            self.Mutate_An_Activation_Function_In(self.activeLayer1)
+
+        elif mutateLayer == 1:
+
+            self.Mutate_An_Activation_Function_In(self.activeLayer2)
+
+    def Mutate_An_Activation_Function_In(self,activeLayer):
+
+        h = np.random.randint(c.cppnHiddens)
+
+        activationFunctionType = np.random.randint(c.numCPPNActivationFunctions)
+
+        activeLayer[h] = c.cppnActivationFunctions[activationFunctionType]
 
     def Paint(self,vectorField):
 

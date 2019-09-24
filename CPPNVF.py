@@ -38,7 +38,7 @@ def Mutate_CPPNs(choice):
 
 def Prep_Drawing():
 
-    fig = plt.figure()
+    fig = plt.figure(figsize=(20,10))
 
     #ax = fig.add_subplot(339)
 
