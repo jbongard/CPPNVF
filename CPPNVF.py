@@ -34,15 +34,17 @@ def Mutate_CPPNs(choice):
 
             cppns[panelIndex] = copy.deepcopy(cppns[choice])
 
+            cppns[panelIndex].Mutate()
+
 def Prep_Drawing():
 
     fig = plt.figure()
 
-    ax = fig.add_subplot(339)
+    #ax = fig.add_subplot(339)
 
-    ax.set_xlim( c.vectorFieldMinimum - c.vectorFieldCellWidth  , c.vectorFieldMaximum + c.vectorFieldCellWidth)
+    #ax.set_xlim( c.vectorFieldMinimum - c.vectorFieldCellWidth  , c.vectorFieldMaximum + c.vectorFieldCellWidth)
 
-    ax.set_ylim( c.vectorFieldMinimum - c.vectorFieldCellHeight , c.vectorFieldMaximum + c.vectorFieldCellHeight)
+    #ax.set_ylim( c.vectorFieldMinimum - c.vectorFieldCellHeight , c.vectorFieldMaximum + c.vectorFieldCellHeight)
 
     return fig
 
@@ -52,7 +54,7 @@ Create_CPPNs()
 
 Draw_CPPNs()
 
-for g in range(5):
+while True:
 
     choice = int( input('Which vector field to you like the best [1-'+str(c.numberOfCPPNs)+']: ') )
 

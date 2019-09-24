@@ -1,8 +1,10 @@
+import numpy as np
+
 import math
 
 # -------- Visualization -----------------
 
-numberOfCPPNs          = 2 * 2
+numberOfCPPNs          = 4 * 4 
 
 # --------------- Edges ------------------
 
@@ -16,7 +18,7 @@ numEdgeChangeActions   = 4
 
 # ----------- Vector field ---------------
 
-vectorFieldResolution  = 11 
+vectorFieldResolution  = 31 
 
 vectorFieldMinimum     = -1.0
 
@@ -52,7 +54,41 @@ cppnHiddens = numEdgeChangeActions + 2
 
 cppnOutputs = numEdgeChangeActions + 2 
 
-cppnInitialMinWeight = -10.0
+cppnInitialMinWeight = -1.0
 
-cppnInitialMaxWeight = +10.0
+cppnInitialMaxWeight = +1.0
 
+cppnSinActFn = 0
+cppnAbsActFn = 1
+cppnGauActFn = 2
+cppnTanActFn = 3
+cppnNegActFn = 4
+cppnIdnActFn = 5
+
+def Gaussian(X):
+
+    return np.exp( -X**2 / 2.0 )
+
+def Negate(X):
+
+    return -1 * X 
+
+def Identity(X):
+
+    return X
+
+cppnActivationFunctions = {}
+
+cppnActivationFunctions[cppnSinActFn] = np.sin
+
+cppnActivationFunctions[cppnAbsActFn] = np.abs
+
+cppnActivationFunctions[cppnGauActFn] = Gaussian
+
+cppnActivationFunctions[cppnTanActFn] = np.tanh
+
+cppnActivationFunctions[cppnNegActFn] = Negate
+
+cppnActivationFunctions[cppnIdnActFn] = Identity
+
+numCPPNActivationFunctions = len(cppnActivationFunctions)

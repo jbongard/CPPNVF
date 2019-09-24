@@ -1,5 +1,7 @@
 import constants as c
 
+import math
+
 import numpy as np
 
 from vectorField import VECTOR_FIELD
@@ -14,29 +16,25 @@ class CPPN:
 
         self.hiddenLayer1 = np.zeros(c.cppnHiddens,dtype='f')
 
-        self.hiddenLayer1SinMask = np.random.randint(2, size=c.cppnHiddens) 
+        self.activeLayer1 = {}
 
-        self.hiddenLayer1AbsMask = np.random.randint(2, size=c.cppnHiddens)
+        for h in range(c.cppnHiddens):
 
-        self.hiddenLayer1GauMask = np.random.randint(2, size=c.cppnHiddens)
+            activationFunctionType = np.random.randint(c.numCPPNActivationFunctions)
 
-        self.hiddenLayer1TanMask = np.random.randint(2, size=c.cppnHiddens)
-
-        self.hiddenLayer1NegMask = np.random.randint(2, size=c.cppnHiddens) 
+            self.activeLayer1[h] = c.cppnActivationFunctions[activationFunctionType] 
 
         self.HHWeights    = np.random.uniform( c.cppnInitialMinWeight , c.cppnInitialMaxWeight , [c.cppnHiddens,c.cppnHiddens] )
 
         self.hiddenLayer2 = np.zeros(c.cppnHiddens,dtype='f')
 
-        self.hiddenLayer2SinMask = np.random.randint(2, size=c.cppnHiddens)
+        self.activeLayer2 = {}
 
-        self.hiddenLayer2AbsMask = np.random.randint(2, size=c.cppnHiddens)
+        for h in range(c.cppnHiddens):
 
-        self.hiddenLayer2GauMask = np.random.randint(2, size=c.cppnHiddens)
+            activationFunctionType = np.random.randint(c.numCPPNActivationFunctions)
 
-        self.hiddenLayer2TanMask = np.random.randint(2, size=c.cppnHiddens)
-
-        self.hiddenLayer2NegMask = np.random.randint(2, size=c.cppnHiddens)
+            self.activeLayer2[h] = c.cppnActivationFunctions[activationFunctionType]
 
         self.HOWeights    = np.random.uniform( c.cppnInitialMinWeight , c.cppnInitialMaxWeight , [c.cppnHiddens,c.cppnOutputs] )
 
@@ -49,6 +47,10 @@ class CPPN:
         self.Paint(vectorField)
 
         vectorField.Draw(fig,panelIndex)
+
+    def Mutate(self):
+
+        self.HOWeights = np.random.normal( loc = self.HOWeights , scale = np.abs(self.HOWeights) )
 
     def Print(self):
 
@@ -94,30 +96,19 @@ class CPPN:
 
         self.inputLayer[3] = 1 # Bias neuron
 
+
         self.hiddenLayer1 = np.dot( self.inputLayer   , self.IHWeights )
 
-        self.hiddenLayer1 = self.hiddenLayer1 + np.multiply( self.hiddenLayer1SinMask , np.sin(self.hiddenLayer1) )
+        for h in range(c.cppnHiddens):
 
-        self.hiddenLayer1 = self.hiddenLayer1 + np.multiply( self.hiddenLayer1AbsMask , np.abs(self.hiddenLayer1) )
-
-        self.hiddenLayer1 = self.hiddenLayer1 + np.multiply( self.hiddenLayer1GauMask , np.exp( -self.hiddenLayer1**2 / 2.0 ) )
-
-        self.hiddenLayer1 = self.hiddenLayer1 + np.multiply( self.hiddenLayer1TanMask , np.tanh(self.hiddenLayer1) )
-
-        self.hiddenLayer1 = self.hiddenLayer1 + np.multiply( self.hiddenLayer1NegMask , -1 * self.hiddenLayer1 )
+            self.hiddenLayer1[h] = self.activeLayer1[h]( self.hiddenLayer1[h] )
 
 
         self.hiddenLayer2 = np.dot( self.hiddenLayer1 , self.HHWeights )
 
-        self.hiddenLayer2 = self.hiddenLayer2 + np.multiply( self.hiddenLayer2SinMask , np.sin(self.hiddenLayer2) )
+        for h in range(c.cppnHiddens):
 
-        self.hiddenLayer2 = self.hiddenLayer2 + np.multiply( self.hiddenLayer2AbsMask , np.abs(self.hiddenLayer2) )
-
-        self.hiddenLayer2 = self.hiddenLayer2 + np.multiply( self.hiddenLayer2GauMask , np.exp( -self.hiddenLayer2**2 / 2.0 ) )
-
-        self.hiddenLayer2 = self.hiddenLayer2 + np.multiply( self.hiddenLayer2TanMask , np.tanh(self.hiddenLayer2) )
-
-        self.hiddenLayer2 = self.hiddenLayer2 + np.multiply( self.hiddenLayer2NegMask , -1 * self.hiddenLayer2 )
+            self.hiddenLayer2[h] = self.activeLayer2[h]( self.hiddenLayer2[h] )
 
 
         self.outputLayer  = np.tanh( np.dot( self.hiddenLayer2 , self.HOWeights ) )
